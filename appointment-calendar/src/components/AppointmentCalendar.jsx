@@ -198,7 +198,7 @@ const AppointmentCalendar = () => {
 
     return (
       <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-primary'}`}>
-        {/* Filter Section */}
+
         <FilterSection />
         
         {/* Header with Date Picker */}
