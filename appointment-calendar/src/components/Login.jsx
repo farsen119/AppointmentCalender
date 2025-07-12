@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,6 +8,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { isDarkMode } = useDarkMode();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,13 +28,15 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#eaf9e7' }}>
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
+    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-primary'}`}>
+      <div className={`max-w-md w-full space-y-8 p-8 rounded-lg shadow-lg ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold" style={{ color: '#013237' }}>
+          <h2 className={`mt-6 text-center text-3xl font-extrabold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
             Clinic Staff Login
           </h2>
-          <p className="mt-2 text-center text-sm" style={{ color: '#4ca771' }}>
+          <p className={`mt-2 text-center text-sm ${isDarkMode ? 'text-green-400' : 'text-accent'}`}>
             Sign in to access the appointment calendar
           </p>
         </div>
@@ -48,14 +52,14 @@ const Login = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm rounded-t-md ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                    : 'border-gray-300 text-gray-900'
+                }`}
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  borderColor: '#4ca771',
-                  focusRingColor: '#4ca771'
-                }}
               />
             </div>
             <div>
@@ -68,14 +72,14 @@ const Login = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm rounded-b-md ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                    : 'border-gray-300 text-gray-900'
+                }`}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  borderColor: '#4ca771',
-                  focusRingColor: '#4ca771'
-                }}
               />
             </div>
           </div>
@@ -90,14 +94,13 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
-              style={{ backgroundColor: '#4ca771' }}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 bg-accent hover:bg-green-700"
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
 
-          <div className="text-center text-sm" style={{ color: '#013237' }}>
+          <div className={`text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-dark'}`}>
             <p>Demo credentials:</p>
             <p>Email: staff@clinic.com</p>
             <p>Password: 123456</p>

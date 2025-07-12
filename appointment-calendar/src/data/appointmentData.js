@@ -1,21 +1,19 @@
 export const patients = [
-  { id: 1, name: 'John Doe', phone: '+1-555-0101', email: 'john.doe@email.com' },
-  { id: 2, name: 'Sarah Wilson', phone: '+1-555-0102', email: 'sarah.wilson@email.com' },
-  { id: 3, name: 'Mike Johnson', phone: '+1-555-0103', email: 'mike.johnson@email.com' },
-  { id: 4, name: 'Emily Chen', phone: '+1-555-0104', email: 'emily.chen@email.com' },
-  { id: 5, name: 'David Brown', phone: '+1-555-0105', email: 'david.brown@email.com' },
-  { id: 6, name: 'Lisa Garcia', phone: '+1-555-0106', email: 'lisa.garcia@email.com' },
-  { id: 7, name: 'Robert Taylor', phone: '+1-555-0107', email: 'robert.taylor@email.com' },
-  { id: 8, name: 'Maria Rodriguez', phone: '+1-555-0108', email: 'maria.rodriguez@email.com' }
+  { id: 1, name: 'Dhoni', phone: '+91-1234567891', email: 'dhoni@email.com' },
+  { id: 2, name: 'Virat Kohli', phone: '+91-1234567892', email: 'virat.kohli@email.com' },
+  { id: 3, name: 'Rohit sharma', phone: '+91-1234567895', email: 'rohith.sharma@email.com' },
+  { id: 4, name: 'Raina', phone: '+91-7894561237', email: 'raina@email.com' },
+  { id: 5, name: 'Dravid', phone: '+91-5467891239', email: 'dravid@email.com' },
+  { id: 6, name: 'AB de Villiers', phone: '+91-3214567895', email: 'abd@email.com' },
+  { id: 7, name: 'Ruturaj gaikwad', phone: '+91-5895215514', email: 'ruturajgaikwad@email.com' },
 ];
 
 export const doctors = [
-  { id: 1, name: 'Dr. Smith', specialization: 'General Medicine', phone: '+1-555-0201' },
-  { id: 2, name: 'Dr. Johnson', specialization: 'Cardiology', phone: '+1-555-0202' },
-  { id: 3, name: 'Dr. Brown', specialization: 'Pediatrics', phone: '+1-555-0203' },
-  { id: 4, name: 'Dr. Davis', specialization: 'Orthopedics', phone: '+1-555-0204' },
-  { id: 5, name: 'Dr. Wilson', specialization: 'Dermatology', phone: '+1-555-0205' },
-  { id: 6, name: 'Dr. Garcia', specialization: 'Neurology', phone: '+1-555-0206' }
+  { id: 1, name: 'Dr. Messi', specialization: 'General Medicine', phone: '+91-1234567890' },
+  { id: 2, name: 'Dr. Ronaldo', specialization: 'Cardiology', phone: '+91-1234590000' },
+  { id: 3, name: 'Dr. Neymar', specialization: 'Heart', phone: '+91-1234561111' },
+  { id: 4, name: 'Dr. Mbappe', specialization: 'Orthopedics', phone: '+91-1234522222' },
+  { id: 5, name: 'Dr. Salah', specialization: 'Dermatology', phone: '++91-1234235725' },
 ];
 
 export const timeSlots = [

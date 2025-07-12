@@ -37,11 +37,9 @@ const AppointmentCalendar = () => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [isMobileView, setIsMobileView] = useState(false);
   
-  // Filter states
   const [filterDoctor, setFilterDoctor] = useState('');
   const [filterPatient, setFilterPatient] = useState('');
   
-  // Dark mode
   const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
@@ -65,7 +63,6 @@ const AppointmentCalendar = () => {
     }
   }, []);
 
-  // Filter appointments when filters change
   useEffect(() => {
     let filtered = events;
     
@@ -390,7 +387,6 @@ const AppointmentCalendar = () => {
       );
     };
 
-    // Custom month view
     const CustomMonth = ({ date }) => {
       const start = startOfWeek(startOfMonth(date), { weekStartsOn: 0 });
       const end = endOfWeek(endOfMonth(date), { weekStartsOn: 0 });
