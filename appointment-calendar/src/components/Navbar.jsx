@@ -13,9 +13,13 @@ const Navbar = () => {
   return (
     <nav className="w-full p-4 flex justify-between items-center shadow" style={{ backgroundColor: "#013237" }}>
       <div>
-        <span className="text-white text-xl font-bold">Clinic Calendar</span>
+        <Link to="/">
+          <span className="text-white text-xl font-bold cursor-pointer hover:text-gray-300">
+            Clinic Calendar
+          </span>
+        </Link>
       </div>
-      <div>
+      <div className="flex items-center gap-4">
         {!isAuthenticated ? (
           <Link to="/login">
             <button
@@ -26,13 +30,22 @@ const Navbar = () => {
             </button>
           </Link>
         ) : (
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded text-white font-medium"
-            style={{ backgroundColor: "#4ca771" }}
-          >
-            Logout
-          </button>
+          <>
+            <Link to="/calendar">
+              <button
+                className="px-4 py-2 rounded text-white font-medium"
+                style={{ backgroundColor: "#4ca771" }}
+              >
+                Calendar
+              </button>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 rounded text-white font-medium border border-white hover:bg-white hover:text-gray-800"
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
     </nav>

@@ -10,13 +10,25 @@ function PrivateRoute({ children }) {
   return isAuthenticated ? children : <Navigate to="/login" />;
 }
 
+function PublicRoute({ children }) {
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  return isAuthenticated ? <Navigate to="/calendar" /> : children;
+}
+
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/calendar"
           element={
