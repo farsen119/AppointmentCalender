@@ -4,6 +4,7 @@ import { patients, doctors, timeSlots } from '../data/appointmentData';
 import { getAllAppointments, addAppointment, updateAppointment, deleteAppointment } from '../services/appointmentService';
 import AppointmentForm from './AppointmentForm';
 import ShowAppointmentList from './ShowAppointmentList';
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 function getPatientName(patientId) {
   const patient = patients.find(p => String(p.id) === String(patientId));
@@ -39,6 +40,9 @@ const AppointmentCalendar = () => {
   // Filter states
   const [filterDoctor, setFilterDoctor] = useState('');
   const [filterPatient, setFilterPatient] = useState('');
+  
+  // Dark mode
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -129,17 +133,19 @@ const AppointmentCalendar = () => {
   };
 
   const FilterSection = () => (
-    <div className="mb-4 p-4 bg-white rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-3" style={{ color: '#013237' }}>
+    <div className={`mb-4 p-4 rounded-lg shadow ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
+      <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
         Filter Appointments
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Filter by Doctor</label>
+          <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Filter by Doctor
+          </label>
           <select
             value={filterDoctor}
             onChange={(e) => setFilterDoctor(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
           >
             <option value="">All Doctors</option>
             {doctors.map(doctor => (
@@ -150,11 +156,13 @@ const AppointmentCalendar = () => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Filter by Patient</label>
+          <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Filter by Patient
+          </label>
           <select
             value={filterPatient}
             onChange={(e) => setFilterPatient(e.target.value)}
-            className="w-full p-2 border rounded"
+            className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
           >
             <option value="">All Patients</option>
             {patients.map(patient => (
@@ -167,14 +175,14 @@ const AppointmentCalendar = () => {
         <div className="flex items-end">
           <button
             onClick={clearFilters}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            className={`px-4 py-2 rounded font-medium ${isDarkMode ? 'bg-gray-600 text-white hover:bg-gray-700' : 'bg-gray-500 text-white hover:bg-gray-600'}`}
           >
             Clear Filters
           </button>
         </div>
       </div>
       {(filterDoctor || filterPatient) && (
-        <div className="mt-2 text-sm text-gray-600">
+        <div className={`mt-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           Showing {filteredEvents.length} of {events.length} appointments
         </div>
       )}
@@ -192,127 +200,96 @@ const AppointmentCalendar = () => {
     };
 
     return (
-      <div style={{ backgroundColor: '#eaf9e7', minHeight: '100vh' }}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-primary'}`}>
         {/* Filter Section */}
         <FilterSection />
         
         {/* Header with Date Picker */}
-        <div style={{ backgroundColor: 'white', padding: '16px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div className={`p-4 shadow ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => navigateDay(-1)}
-              style={{ 
-                padding: '8px', 
-                borderRadius: '50%', 
-                border: 'none',
-                color: '#4ca771',
-                cursor: 'pointer'
-              }}
+              className={`p-2 rounded-full ${isDarkMode ? 'text-green-400 hover:bg-gray-700' : 'text-green-600 hover:bg-gray-100'}`}
             >
               ←
             </button>
             
-            <div style={{ textAlign: 'center' }}>
-              <h2 style={{ color: '#013237', fontSize: '18px', fontWeight: '600', margin: 0 }}>
+            <div className="text-center">
+              <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
                 {format(selectedDate, 'EEEE, MMMM d, yyyy')}
               </h2>
-              <p style={{ color: '#4ca771', fontSize: '14px', margin: '4px 0 0 0' }}>
+              <p className={`text-sm ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
                 {dayAppointments.length} appointment{dayAppointments.length !== 1 ? 's' : ''}
               </p>
             </div>
             
             <button
               onClick={() => navigateDay(1)}
-              style={{ 
-                padding: '8px', 
-                borderRadius: '50%', 
-                border: 'none',
-                color: '#4ca771',
-                cursor: 'pointer'
-              }}
+              className={`p-2 rounded-full ${isDarkMode ? 'text-green-400 hover:bg-gray-700' : 'text-green-600 hover:bg-gray-100'}`}
             >
               →
             </button>
           </div>
           
           {/* Date Picker */}
-          <div style={{ marginBottom: '16px' }}>
+          <div className="mb-4">
             <input
               type="date"
               value={format(selectedDate, 'yyyy-MM-dd')}
               onChange={(e) => setSelectedDate(new Date(e.target.value))}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid #4ca771',
-                borderRadius: '4px',
-                color: '#013237',
-                fontSize: '16px'
-              }}
+              className={`w-full p-2 border rounded ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-green-600 text-gray-800'}`}
             />
           </div>
         </div>
 
         {/* Appointments List */}
-        <div style={{ padding: '16px', overflowY: 'auto', height: 'calc(100vh - 280px)' }}>
+        <div className="p-4 overflow-y-auto" style={{ height: 'calc(100vh - 280px)' }}>
           {dayAppointments.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '32px 16px' }}>
-              <p style={{ color: '#4ca771', marginBottom: '16px' }}>No appointments for this day</p>
+            <div className="text-center py-8">
+              <p className={`mb-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
+                No appointments for this day
+              </p>
               <button
                 onClick={() => openModal(selectedDate)}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontWeight: '500',
-                  color: 'white',
-                  backgroundColor: '#4ca771',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
+                className="px-4 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 + Add Appointment
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="space-y-3">
               {dayAppointments.map((appointment) => (
                 <div
                   key={appointment.id}
-                  style={{
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                    cursor: 'pointer',
-                    borderLeft: '4px solid #4ca771'
-                  }}
+                  className={`p-4 rounded-lg cursor-pointer border-l-4 border-green-600 ${
+                    isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'
+                  }`}
                   onClick={() => {
                     setSelectedDayAppointments([appointment]);
                     setSelectedDay(selectedDate);
                     setShowAppointmentList(true);
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div className="flex justify-between items-start">
                     <div>
-                      <h3 style={{ color: '#013237', fontWeight: '600', margin: '0 0 4px 0' }}>
+                      <h3 className={`font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
                         {getPatientName(appointment.patientId)}
                       </h3>
-                      <p style={{ color: '#4ca771', fontSize: '14px', margin: '0 0 4px 0' }}>
+                      <p className={`text-sm mb-1 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
                         {getDoctorName(appointment.doctorId)}
                       </p>
-                      <p style={{ color: '#666', fontSize: '14px', margin: '0' }}>
+                      <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         {format(new Date(`2000-01-01T${appointment.time}`), 'HH:mm')} - {appointment.type}
                       </p>
                       {appointment.notes && (
-                        <p style={{ color: '#999', fontSize: '14px', margin: '4px 0 0 0' }}>{appointment.notes}</p>
+                        <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                          {appointment.notes}
+                        </p>
                       )}
                     </div>
-                    <span style={{
-                      fontSize: '12px',
-                      backgroundColor: '#f0f0f0',
-                      padding: '4px 8px',
-                      borderRadius: '4px'
-                    }}>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
+                    }`}>
                       {appointment.type}
                     </span>
                   </div>
@@ -322,17 +299,7 @@ const AppointmentCalendar = () => {
               {/* Add Appointment Button */}
               <button
                 onClick={() => openModal(selectedDate)}
-                style={{
-                  width: '100%',
-                  marginTop: '16px',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  fontWeight: '500',
-                  color: 'white',
-                  backgroundColor: '#4ca771',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
+                className="w-full mt-4 px-4 py-2 rounded font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 + Add Appointment
               </button>
@@ -353,10 +320,14 @@ const AppointmentCalendar = () => {
 
       return (
         <div
-          className={`h-28 p-1 relative flex flex-col rounded ${isToday ? 'border-2 border-green-600' : ''}`}
+          className={`h-28 p-1 relative flex flex-col rounded ${isToday ? 'border-2 border-green-600' : ''} ${
+            isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+          }`}
           style={{ 
             cursor: 'pointer',
-            backgroundColor: isCurrentMonth ? '#eaf9e7' : '#f5f5f5'
+            backgroundColor: isCurrentMonth 
+              ? (isDarkMode ? '#1a202c' : '#eaf9e7') 
+              : (isDarkMode ? '#2d3748' : '#f5f5f5')
           }}
           onClick={e => {
             if (dayAppointments.length === 0) openModal(date);
@@ -365,7 +336,11 @@ const AppointmentCalendar = () => {
           {/* Row 1: Date */}
           <div
             className="text-xs font-bold mb-1"
-            style={{ color: isCurrentMonth ? '#013237' : '#aaa' }}
+            style={{ 
+              color: isCurrentMonth 
+                ? (isDarkMode ? '#e2e8f0' : '#013237') 
+                : (isDarkMode ? '#718096' : '#aaa')
+            }}
             onClick={e => {
               e.stopPropagation();
               openModal(date);
@@ -435,28 +410,28 @@ const AppointmentCalendar = () => {
     };
 
     return (
-      <div className="p-4">
+      <div className={`p-4 ${isDarkMode ? 'bg-gray-900' : 'bg-primary'}`}>
         {/* Filter Section */}
         <FilterSection />
         
         <div className="mb-4 flex justify-between items-center">
           <button
-            className="px-3 py-1 rounded bg-dark text-white"
+            className={`px-3 py-1 rounded font-medium ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-dark text-white'}`}
             onClick={() => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
           >
             Prev
           </button>
-          <h2 className="text-2xl font-bold" style={{ color: '#013237' }}>
+          <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
             {format(currentDate, 'MMMM yyyy')}
           </h2>
           <button
-            className="px-3 py-1 rounded bg-dark text-white "
+            className={`px-3 py-1 rounded font-medium ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-dark text-white'}`}
             onClick={() => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
           >
             Next
           </button>
         </div>
-        <div className="grid grid-cols-7 mb-2 text-center text-sm font-semibold" style={{ color: '#013237' }}>
+        <div className={`grid grid-cols-7 mb-2 text-center text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
             <div key={d}>{d}</div>
           ))}
@@ -467,7 +442,7 @@ const AppointmentCalendar = () => {
   };
 
   return (
-    <div>
+    <div className={isDarkMode ? 'bg-gray-900' : 'bg-primary'}>
       {isMobileView ? <MobileDayView /> : <DesktopMonthView />}
       
       {/* Appointment Form Modal */}
