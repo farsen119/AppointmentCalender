@@ -26,6 +26,7 @@ const defaultForm = {
 
 const AppointmentCalendar = () => {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(defaultForm);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -34,6 +35,10 @@ const AppointmentCalendar = () => {
   const [selectedDayAppointments, setSelectedDayAppointments] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [isMobileView, setIsMobileView] = useState(false);
+  
+  // Filter states
+  const [filterDoctor, setFilterDoctor] = useState('');
+  const [filterPatient, setFilterPatient] = useState('');
 
   useEffect(() => {
     const checkMobile = () => {
@@ -49,10 +54,27 @@ const AppointmentCalendar = () => {
     try {
       const appointments = getAllAppointments();
       setEvents(appointments);
+      setFilteredEvents(appointments);
     } catch (e) {
       setEvents([]);
+      setFilteredEvents([]);
     }
   }, []);
+
+  // Filter appointments when filters change
+  useEffect(() => {
+    let filtered = events;
+    
+    if (filterDoctor) {
+      filtered = filtered.filter(event => String(event.doctorId) === filterDoctor);
+    }
+    
+    if (filterPatient) {
+      filtered = filtered.filter(event => String(event.patientId) === filterPatient);
+    }
+    
+    setFilteredEvents(filtered);
+  }, [events, filterDoctor, filterPatient]);
 
   const handleSave = (formData) => {
     if (selectedEvent) {
@@ -76,6 +98,7 @@ const AppointmentCalendar = () => {
     setSelectedEvent(null);
     setShowModal(true);
   };
+  
   const openEditModal = (event) => {
     setForm({
       patientId: event.patientId,
@@ -90,7 +113,6 @@ const AppointmentCalendar = () => {
     setShowModal(true);
   };
 
-  // Delete
   const handleDelete = () => {
     if (selectedEvent) {
       deleteAppointment(selectedEvent.id);
@@ -101,9 +123,67 @@ const AppointmentCalendar = () => {
     }
   };
 
+  const clearFilters = () => {
+    setFilterDoctor('');
+    setFilterPatient('');
+  };
+
+  const FilterSection = () => (
+    <div className="mb-4 p-4 bg-white rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-3" style={{ color: '#013237' }}>
+        Filter Appointments
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">Filter by Doctor</label>
+          <select
+            value={filterDoctor}
+            onChange={(e) => setFilterDoctor(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">All Doctors</option>
+            {doctors.map(doctor => (
+              <option key={doctor.id} value={doctor.id}>
+                {doctor.name} - {doctor.specialization}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Filter by Patient</label>
+          <select
+            value={filterPatient}
+            onChange={(e) => setFilterPatient(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">All Patients</option>
+            {patients.map(patient => (
+              <option key={patient.id} value={patient.id}>
+                {patient.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-end">
+          <button
+            onClick={clearFilters}
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+      {(filterDoctor || filterPatient) && (
+        <div className="mt-2 text-sm text-gray-600">
+          Showing {filteredEvents.length} of {events.length} appointments
+        </div>
+      )}
+    </div>
+  );
+
   const MobileDayView = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const dayAppointments = events.filter(ev => ev.date === format(selectedDate, 'yyyy-MM-dd'));
+    const dayAppointments = filteredEvents.filter(ev => ev.date === format(selectedDate, 'yyyy-MM-dd'));
 
     const navigateDay = (direction) => {
       const newDate = new Date(selectedDate);
@@ -113,6 +193,9 @@ const AppointmentCalendar = () => {
 
     return (
       <div style={{ backgroundColor: '#eaf9e7', minHeight: '100vh' }}>
+        {/* Filter Section */}
+        <FilterSection />
+        
         {/* Header with Date Picker */}
         <div style={{ backgroundColor: 'white', padding: '16px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -171,7 +254,7 @@ const AppointmentCalendar = () => {
         </div>
 
         {/* Appointments List */}
-        <div style={{ padding: '16px', overflowY: 'auto', height: 'calc(100vh - 140px)' }}>
+        <div style={{ padding: '16px', overflowY: 'auto', height: 'calc(100vh - 280px)' }}>
           {dayAppointments.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '32px 16px' }}>
               <p style={{ color: '#4ca771', marginBottom: '16px' }}>No appointments for this day</p>
@@ -264,7 +347,7 @@ const AppointmentCalendar = () => {
     const DayCell = ({ date }) => {
       const isCurrentMonth = date.getMonth() === currentDate.getMonth();
       const isToday = new Date().toDateString() === date.toDateString();
-      const dayAppointments = events.filter(ev => ev.date === format(date, 'yyyy-MM-dd'));
+      const dayAppointments = filteredEvents.filter(ev => ev.date === format(date, 'yyyy-MM-dd'));
       const firstAppointment = dayAppointments[0];
       const moreCount = dayAppointments.length - 1;
 
@@ -353,6 +436,9 @@ const AppointmentCalendar = () => {
 
     return (
       <div className="p-4">
+        {/* Filter Section */}
+        <FilterSection />
+        
         <div className="mb-4 flex justify-between items-center">
           <button
             className="px-3 py-1 rounded bg-dark text-white"

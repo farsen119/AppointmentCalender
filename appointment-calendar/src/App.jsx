@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -17,28 +18,30 @@ function PublicRoute({ children }) {
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            <PrivateRoute>
-              <AppointmentCalendar />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <DarkModeProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <PrivateRoute>
+                <AppointmentCalendar />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </DarkModeProvider>
   );
 }
 
